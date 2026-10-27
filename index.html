@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#14213d">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="สมุดสอบ">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>สมุดสอบ – ตารางอ่านหนังสือและคลังชีท</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@500;700&family=Sarabun:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f2f5fb;--card:#fff;--ink:#14213d;--mute:#5d6882;--line:#d9e0ee;--hl:#ffd60a;--coral:#ff5d7d;--mint:#17b3a3;--blue:#3a5bff;--grid:rgba(58,91,255,.07);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101626;--card:#19213a;--ink:#eef1fa;--mute:#9aa6c4;--line:#2b3556;--grid:rgba(140,160,255,.06);--hl:#ffd60a}}
+:root[data-theme="dark"]{--bg:#101626;--card:#19213a;--ink:#eef1fa;--mute:#9aa6c4;--line:#2b3556;--grid:rgba(140,160,255,.06)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.6 Sarabun,"Noto Sans Thai",sans-serif;background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:28px 28px}
+h1,h2,h3,.pr{font-family:Prompt,"Noto Sans Thai",sans-serif;font-weight:700;margin:0;line-height:1.3}
+.wrap{max-width:1040px;margin:0 auto;padding:20px 16px 60px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+h1{font-size:clamp(28px,6vw,44px)}
+h1 mark{background:linear-gradient(transparent 55%,var(--hl) 55%);color:inherit;padding:0 4px}
+.sub{color:var(--mute);margin:4px 0 0}
+.tabs{display:flex;gap:6px;background:var(--card);border:1.5px solid var(--ink);border-radius:14px;padding:4px;width:fit-content;margin-bottom:20px}
+.tabs button{border:0;background:none;color:var(--ink);font:500 15px Prompt,sans-serif;padding:9px 18px;border-radius:10px;cursor:pointer}
+.tabs button[aria-selected=true]{background:var(--ink);color:var(--bg)}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.grid{display:grid;gap:16px;grid-template-columns:1fr}
+@media(min-width:860px){.grid{grid-template-columns:340px 1fr}}
+.card{background:var(--card);border:1.5px solid var(--ink);border-radius:16px;padding:18px;box-shadow:4px 4px 0 var(--ink)}
+.card h2{font-size:20px;margin-bottom:12px}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 3px}
+input,select,textarea{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:9px 11px}
+.row{display:flex;gap:8px}.row>*{flex:1}
+.btn{border:1.5px solid var(--ink);background:var(--hl);color:#14213d;font:500 15px Prompt,sans-serif;padding:10px 16px;border-radius:12px;cursor:pointer;margin-top:12px;transition:transform .12s}
+.btn:active{transform:translateY(2px)}
+.btn.ghost{background:var(--card);color:var(--ink)}
+.chip{display:flex;align-items:center;gap:10px;padding:10px 12px;border:1.5px solid var(--line);border-radius:12px;margin-top:8px;border-left:8px solid var(--c)}
+.chip b{font-family:Prompt;font-weight:500}.chip small{color:var(--mute);display:block}
+.chip .x{margin-left:auto;background:none;border:0;color:var(--mute);font-size:20px;cursor:pointer}
+.task{display:flex;align-items:center;gap:12px;padding:11px 12px;border:1.5px solid var(--line);border-left:8px solid var(--c);border-radius:12px;margin-top:8px;cursor:pointer}
+.task input{width:22px;height:22px;accent-color:var(--mint);flex:none;padding:0}
+.task.done{opacity:.5;text-decoration:line-through}
+.task span.t{margin-left:auto;font:500 14px Prompt;white-space:nowrap}
+.tag{font-size:12px;padding:1px 8px;border-radius:99px;background:var(--coral);color:#fff;margin-left:6px;font-family:Prompt}
+.top{display:flex;align-items:center;gap:16px;margin-bottom:6px}
+.ring{--p:0;width:78px;height:78px;border-radius:50%;background:conic-gradient(var(--mint) calc(var(--p)*1%),var(--line) 0);display:grid;place-items:center;flex:none}
+.ring i{font:700 17px Prompt;font-style:normal;background:var(--card);width:60px;height:60px;border-radius:50%;display:grid;place-items:center}
+.cd{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px}
+.cd div{flex:none;min-width:96px;text-align:center;border:1.5px solid var(--ink);border-radius:12px;padding:8px;background:var(--c);color:#14213d}
+.cd b{font:700 26px Prompt;display:block;line-height:1.1}
+.timer{text-align:center}.timer .big{font:700 52px Prompt;letter-spacing:2px}
+.day{border-top:1.5px dashed var(--line);padding:10px 0}.day h3{font-size:15px;color:var(--mute);font-weight:500}
+.pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.pill{font-size:13px;padding:2px 10px;border-radius:99px;border:1.5px solid var(--line);border-left:6px solid var(--c)}
+.empty{color:var(--mute);text-align:center;padding:22px 8px}
+.tools{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tools>*{flex:1;min-width:140px}
+.sheet{display:flex;gap:14px}
+.vote{display:flex;flex-direction:column;align-items:center;gap:2px;flex:none}
+.vote button{border:1.5px solid var(--ink);background:var(--card);color:var(--ink);border-radius:10px;width:46px;padding:6px 0;font:500 16px Prompt;cursor:pointer}
+.vote button.on{background:var(--hl);color:#14213d}
+.meta{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.meta span{font-size:12px;background:var(--bg);border:1px solid var(--line);padding:1px 9px;border-radius:99px}
+.sheet a,.sheet .lk{color:var(--blue);font-weight:600}
+.sheet h3{font-size:17px}.sheet p{margin:4px 0;color:var(--mute);font-size:15px}
+.rep{background:none;border:0;color:var(--mute);font-size:13px;cursor:pointer;text-decoration:underline;padding:0}
+.lib{display:grid;gap:14px;grid-template-columns:1fr}@media(min-width:760px){.lib{grid-template-columns:1fr 1fr}}
+dialog{border:1.5px solid var(--ink);border-radius:16px;background:var(--card);color:var(--ink);max-width:460px;width:calc(100% - 24px);padding:20px}
+dialog::backdrop{background:rgba(10,15,35,.55)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-family:Prompt;z-index:9}
+.note{font-size:13px;color:var(--mute);margin-top:14px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:14px}.stats div{text-align:center;border:1.5px dashed var(--line);border-radius:12px;padding:8px 4px}.stats b{font:700 22px Prompt;display:block}.stats small{color:var(--mute);font-size:12px}.stars button{background:none;border:0;font-size:34px;cursor:pointer;color:var(--line);padding:0 2px}.stars button.on{color:#ffb400}.bar{display:flex;align-items:center;gap:8px;font-size:13px}.bar .tr{flex:1;background:var(--line);border-radius:99px;height:8px;overflow:hidden}.bar i{display:block;height:100%;background:var(--hl)}ol.steps{padding-left:22px}ol.steps li{margin:12px 0}code{font:13px ui-monospace,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:1px 6px}pre{font:13px ui-monospace,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;overflow-x:auto;margin:6px 0}.chip a{margin-left:auto;white-space:nowrap}.chip a+.x{margin-left:0}
+[hidden]{display:none!important}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div><h1>สมุด<mark>สอบ</mark></h1><p class="sub">วางแผนอ่านหนังสือ แล้วหาชีทดีๆ จากเพื่อนๆ ที่เดียวจบ</p></div>
+  <button class="btn ghost" id="theme" style="margin:0" aria-label="สลับโหมดสว่าง/มืด">🌓 โหมด</button>
+</header>
+<div class="tabs" role="tablist">
+  <button role="tab" aria-selected="true" data-tab="plan">ตารางอ่านหนังสือ</button>
+  <button role="tab" aria-selected="false" data-tab="lib">คลังชีท</button>
+  <button role="tab" aria-selected="false" data-tab="fb">ความเห็น</button>
+</div>
+
+<section id="plan">
+<div class="grid">
+  <div>
+    <div class="card">
+      <h2>เพิ่มวิชาที่จะสอบ</h2>
+      <label for="sn">ชื่อวิชา</label><input id="sn" placeholder="เช่น ฟิสิกส์ บทไฟฟ้า">
+      <div class="row">
+        <div><label for="sd">วันสอบ</label><input id="sd" type="date"></div>
+        <div><label for="sh">ความยาก</label><select id="sh"><option value="1">ง่าย</option><option value="2" selected>ปานกลาง</option><option value="3">ยาก</option></select></div>
+      </div>
+      <button class="btn" id="add">เพิ่มวิชา</button>
+      <div id="subs"></div>
+      <label for="hrs">ว่างอ่านหนังสือวันละกี่ชั่วโมง</label>
+      <div class="row"><input id="hrs" type="range" min="1" max="10" step="0.5" value="3"><b class="pr" id="hv" style="flex:none;width:60px;text-align:right">3 ชม.</b></div>
+    </div>
+    <div class="card timer" style="margin-top:16px">
+      <h2>จับเวลาโฟกัส</h2>
+      <div class="big" id="tm">25:00</div>
+      <div id="tmode" class="sub">อ่าน 25 นาที พัก 5 นาที</div>
+      <div class="row"><button class="btn" id="ts">เริ่ม</button><button class="btn ghost" id="tr">รีเซ็ต</button></div>
+    </div>
+  </div>
+  <div>
+    <div class="card">
+      <div class="cd" id="cd"></div>
+      <div class="top"><div class="ring" id="ring"><i id="rp">0%</i></div><div><h2 style="margin:0">วันนี้ต้องทำ</h2><p class="sub" id="tdate"></p></div></div>
+      <div id="today"></div>
+      <div class="stats" id="stats"></div>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h2>ตารางล่วงหน้า</h2>
+      <div id="up"></div>
+      <p class="note">ทบทวนรอบ 1, 3 และ 7 วันหลังอ่านแต่ละวิชา เพราะการทวนเป็นช่วงๆ ช่วยให้จำได้นานกว่าอ่านรวดเดียว ข้อมูลเก็บไว้ในเครื่องของคุณ</p>
+    </div>
+  </div>
+</div>
+</section>
+
+<section id="lib" hidden>
+  <div class="tools">
+    <input id="q" placeholder="ค้นหาชีท วิชา หรือหัวข้อ" aria-label="ค้นหา">
+    <select id="fl" aria-label="กรองระดับชั้น"><option value="">ทุกระดับชั้น</option><option>ม.1-3</option><option>ม.4-6</option><option>มหาวิทยาลัย</option></select>
+    <select id="so" aria-label="เรียงลำดับ"><option value="v">คะแนนสูงสุด</option><option value="n">ใหม่สุด</option></select>
+    <button class="btn" style="margin:0" id="new">+ แชร์ชีท</button>
+  </div>
+  <div class="lib" id="list"></div>
+  <p class="note">ชีทและคะแนนในหน้านี้เก็บไว้ในเครื่องของคุณเท่านั้น หากต้องการให้คนอื่นเห็นด้วยกัน ต้องต่อกับระบบหลังบ้าน โปรดแชร์เฉพาะงานที่คุณเขียนเอง ไม่ใช่ชีทหรือหนังสือที่มีลิขสิทธิ์</p>
+</section>
+</div>
+
+<div class="wrap" style="padding-top:0">
+<section id="fb" hidden><div class="grid">
+<div class="card"><h2>บอกความเห็นของคุณ</h2>
+<label>ให้คะแนนเว็บนี้</label><div class="stars" id="stars" role="radiogroup" aria-label="ให้คะแนน"></div>
+<label for="fc">เรื่องที่อยากพูดถึง</label><select id="fc"><option>ตารางอ่านหนังสือ</option><option>คลังชีท</option><option>หน้าตาและการใช้งาน</option><option>ไอเดียฟีเจอร์ใหม่</option></select>
+<label for="fn">ชื่อ (ไม่ใส่ก็ได้)</label><input id="fn" maxlength="30">
+<label for="ft">ความเห็น</label><textarea id="ft" rows="4" maxlength="400" placeholder="ชอบอะไร อยากให้ปรับตรงไหน"></textarea>
+<button class="btn" id="fs">ส่งความเห็น</button></div>
+<div><div class="card"><div class="top"><div style="flex:none"><h2 id="avg" style="font-size:30px">-</h2><p class="sub" id="cnt"></p></div><div id="dist" style="flex:1"></div></div></div>
+<div id="ffl" style="margin-top:16px;display:grid;gap:12px"></div></div></div>
+<p class="note">ความเห็นเก็บในเครื่องของคุณ หากนำขึ้นเว็บจริงและต่อฐานข้อมูล ทุกคนจะเห็นความเห็นร่วมกัน</p></section>
+</div>
+
+<dialog id="dlg">
+  <h2>แชร์ชีทสรุป</h2>
+  <label for="a1">ชื่อชีท</label><input id="a1" placeholder="เช่น สรุปกฎของนิวตันใน 1 หน้า">
+  <div class="row"><div><label for="a2">วิชา</label><input id="a2" placeholder="ฟิสิกส์"></div>
+  <div><label for="a3">ระดับชั้น</label><select id="a3"><option>ม.1-3</option><option selected>ม.4-6</option><option>มหาวิทยาลัย</option></select></div></div>
+  <label for="a4">คำอธิบายสั้นๆ</label><textarea id="a4" rows="2"></textarea>
+  <label for="a5">ลิงก์ไฟล์ (Google Drive ฯลฯ)</label><input id="a5" type="url" placeholder="https://">
+  <div class="row"><button class="btn" id="save">โพสต์ชีท</button><button class="btn ghost" id="cancel">ยกเลิก</button></div>
+</dialog>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+const $=s=>document.querySelector(s);
+const COLORS=['#ffd60a','#ff8fa3','#6ee7c8','#8fb0ff','#ffb870','#c4a8ff'];
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function load(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+const ymd=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+const parse=s=>{const[a,b,c]=s.split('-').map(Number);return new Date(a,b-1,c)};
+const addD=(d,n)=>{const x=new Date(d);x.setDate(x.getDate()+n);return x};
+const dayDiff=(a,b)=>Math.round((a-b)/864e5);
+const thDate=d=>d.toLocaleDateString('th-TH',{weekday:'short',day:'numeric',month:'short'});
+const fmtH=h=>h>=1?(Math.floor(h)+' ชม.'+(h%1?' 30 น.':'')):(Math.round(h*60)+' น.');
+function toast(m){const t=$('#toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2200)}
+
+/* theme */
+$('#theme').onclick=()=>{const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;r.dataset.theme=dark?'light':'dark'};
+/* tabs */
+document.querySelectorAll('.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  ['plan','lib','fb'].forEach(i=>$('#'+i).hidden=b.dataset.tab!==i);
+  if(b.dataset.tab==='lib')renderLib();
+  location.hash=b.dataset.tab;
+});
+
+/* ---------- Planner ---------- */
+let S=load('sb_state',{subs:[],hrs:3,done:{}});
+const todayD=()=>{const d=new Date();return new Date(d.getFullYear(),d.getMonth(),d.getDate())};
+
+function buildPlan(){
+  const t0=todayD(),plan={};
+  const subs=S.subs.filter(s=>parse(s.date)>=t0);
+  if(!subs.length)return plan;
+  const last=subs.reduce((m,s)=>parse(s.date)>m?parse(s.date):m,t0);
+  const ex=ymd;
+  for(let d=new Date(t0);d<=last;d=addD(d,1)){
+    const key=ex(d),avail=subs.filter(s=>parse(s.date)>d);
+    plan[key]=plan[key]||[];
+    if(!avail.length)continue;
+    const w=avail.map(s=>s.hard*(1+4/Math.max(1,dayDiff(parse(s.date),d))));
+    const tot=w.reduce((a,b)=>a+b,0),blocks=Math.round(S.hrs*2);
+    const raw=w.map(x=>x/tot*blocks),base=raw.map(Math.floor);
+    let left=blocks-base.reduce((a,b)=>a+b,0);
+    raw.map((r,i)=>[r-base[i],i]).sort((a,b)=>b[0]-a[0]).forEach(([_,i])=>{if(left>0){base[i]++;left--}});
+    avail.forEach((s,i)=>{
+      if(base[i]>0){
+        plan[key].push({id:key+'|'+s.id+'|s',sid:s.id,type:'s',h:base[i]/2});
+        [1,3,7].forEach(k=>{const rd=addD(d,k);if(rd<=parse(s.date)&&rd<=last){const rk=ex(rd);(plan[rk]=plan[rk]||[]).push({id:rk+'|'+s.id+'|r'+k+'|'+key,sid:s.id,type:'r',k,h:.33})}});
+      }
+    });
+  }
+  return plan;
+}
+const subById=id=>S.subs.find(s=>s.id===id);
+function taskHTML(t){
+  const s=subById(t.sid);if(!s)return'';
+  const dn=S.done[t.id];
+  return `<label class="task ${dn?'done':''}" style="--c:${s.color}"><input type="checkbox" data-id="${esc(t.id)}" ${dn?'checked':''}><div><b class="pr" style="font-weight:500">${esc(s.name)}</b>${t.type==='r'?`<span class="tag">ทวน รอบ ${t.k} วัน</span>`:''}</div><button type="button" class="rep" style="margin-left:auto" data-find="${esc(s.name)}">ดูชีท</button><span class="t">${t.type==='r'?'20 น.':fmtH(t.h)}</span></label>`;
+}
+function renderPlan(){
+  $('#hv').textContent=S.hrs+' ชม.';$('#hrs').value=S.hrs;
+  const t0=todayD();
+  $('#subs').innerHTML=S.subs.map(s=>`<div class="chip" style="--c:${s.color}"><div><b>${esc(s.name)}</b><small>สอบ ${thDate(parse(s.date))} · ${['','ง่าย','ปานกลาง','ยาก'][s.hard]}</small></div><a class="rep" target="_blank" rel="noopener" href="${gcal(s)}">📅 ลงปฏิทิน</a><button class="x" data-del="${s.id}" aria-label="ลบ ${esc(s.name)}">×</button></div>`).join('');
+  $('#cd').innerHTML=S.subs.slice().sort((a,b)=>a.date.localeCompare(b.date)).map(s=>{const n=dayDiff(parse(s.date),t0);return n<0?'':`<div style="--c:${s.color}"><b>${n===0?'วันนี้':n}</b>${n===0?'':'วัน '}${esc(s.name)}</div>`}).join('');
+  $('#tdate').textContent=t0.toLocaleDateString('th-TH',{dateStyle:'full'});
+  const plan=buildPlan(),tk=plan[ymd(t0)]||[];
+  $('#today').innerHTML=tk.length?tk.sort((a,b)=>(a.type>b.type?1:-1)).map(taskHTML).join(''):`<div class="empty">${S.subs.length?'วันนี้ไม่มีงานอ่าน พักได้เลย 🎉':'เพิ่มวิชาและวันสอบทางซ้าย แล้วเว็บจะจัดตารางให้ทันที'}</div>`;
+  const dn=tk.filter(t=>S.done[t.id]).length,p=tk.length?Math.round(dn/tk.length*100):0;
+  $('#ring').style.setProperty('--p',p);$('#rp').textContent=p+'%';renderStats();
+  const days=Object.keys(plan).sort().filter(k=>k>ymd(t0)).slice(0,10);
+  $('#up').innerHTML=days.length?days.map(k=>{const sum={};plan[k].forEach(t=>{if(t.type==='s')sum[t.sid]=(sum[t.sid]||0)+t.h});
+    return `<div class="day"><h3>${thDate(parse(k))}</h3><div class="pills">${Object.entries(sum).map(([id,h])=>{const s=subById(id);return `<span class="pill" style="--c:${s.color}">${esc(s.name)} ${fmtH(h)}</span>`}).join('')}${plan[k].filter(t=>t.type==='r').map(t=>{const s=subById(t.sid);return `<span class="pill" style="--c:${s.color}">ทวน ${esc(s.name)}</span>`}).join('')}</div></div>`}).join(''):'<div class="empty">ยังไม่มีตารางล่วงหน้า</div>';
+}
+$('#add').onclick=()=>{
+  const n=$('#sn').value.trim(),d=$('#sd').value;
+  if(!n||!d){toast('กรอกชื่อวิชาและวันสอบก่อนนะ');return}
+  if(parse(d)<todayD()){toast('วันสอบต้องไม่ใช่วันที่ผ่านมาแล้ว');return}
+  S.subs.push({id:'s'+Date.now(),name:n,date:d,hard:+$('#sh').value,color:COLORS[S.subs.length%COLORS.length]});
+  $('#sn').value='';save('sb_state',S);renderPlan();toast('จัดตารางให้แล้ว');
+};
+$('#subs').onclick=e=>{const id=e.target.dataset.del;if(id){S.subs=S.subs.filter(s=>s.id!==id);save('sb_state',S);renderPlan()}};
+$('#hrs').oninput=e=>{S.hrs=+e.target.value;save('sb_state',S);renderPlan()};
+$('#today').onchange=e=>{const id=e.target.dataset.id;if(id){S.done[id]=e.target.checked;const tk=Object.values(buildPlan()).flat().find(x=>x.id===id);S.hist=S.hist||{};if(e.target.checked)S.hist[id]=tk?(tk.type==='r'?.33:tk.h):0;else delete S.hist[id];save('sb_state',S);renderPlan();if(e.target.checked)toast('เยี่ยมมาก ไปต่ออีกข้อ')}};
+$('#today').onclick=e=>{const f=e.target.dataset.find;if(f){e.preventDefault();$('#q').value=f;document.querySelector('[data-tab=lib]').click()}};
+
+/* timer */
+let tmS=1500,tmOn=false,tmBreak=false,tmI;
+const showT=()=>{$('#tm').textContent=String(Math.floor(tmS/60)).padStart(2,'0')+':'+String(tmS%60).padStart(2,'0')};
+$('#ts').onclick=()=>{
+  tmOn=!tmOn;$('#ts').textContent=tmOn?'หยุดชั่วคราว':'เริ่ม';clearInterval(tmI);
+  if(tmOn)tmI=setInterval(()=>{tmS--;if(tmS<=0){tmBreak=!tmBreak;tmS=tmBreak?300:1500;$('#tmode').textContent=tmBreak?'พักสายตา 5 นาที':'กลับมาอ่านต่อ 25 นาที';toast(tmBreak?'ครบ 25 นาที พักก่อน':'พักเสร็จ อ่านต่อ')}showT()},1000);
+};
+$('#tr').onclick=()=>{clearInterval(tmI);tmOn=false;tmBreak=false;tmS=1500;$('#ts').textContent='เริ่ม';$('#tmode').textContent='อ่าน 25 นาที พัก 5 นาที';showT()};
+
+/* ---------- Library ---------- */
+const seed=[
+ {id:'a1',title:'สรุปกฎของนิวตันและแรงเสียดทาน',sub:'ฟิสิกส์',lv:'ม.4-6',desc:'สรุปสูตรพร้อมตัวอย่างโจทย์ 5 ข้อ จบในหน้าเดียว',url:'',v:42,t:3},
+ {id:'a2',title:'ตารางกาลทั้งหมดในภาษาอังกฤษ',sub:'ภาษาอังกฤษ',lv:'ม.1-3',desc:'12 tenses เปรียบเทียบแบบตาราง มีสัญญาณบอกเวลา',url:'',v:35,t:2},
+ {id:'a3',title:'สรุปการหาอนุพันธ์ที่ใช้บ่อย',sub:'แคลคูลัส',lv:'มหาวิทยาลัย',desc:'กฎลูกโซ่ กฎผลคูณ พร้อมข้อผิดพลาดที่เจอบ่อย',url:'',v:28,t:1},
+ {id:'a4',title:'แผนผังความคิดระบบย่อยอาหาร',sub:'ชีววิทยา',lv:'ม.4-6',desc:'Mind map สีสัน จำง่าย เหมาะทบทวนก่อนสอบ',url:'',v:19,t:0}];
+let L=load('sb_lib',seed),V=load('sb_votes',{}),R=load('sb_rep',{});
+function renderLib(){
+  const q=$('#q').value.toLowerCase(),f=$('#fl').value;
+  let a=L.filter(x=>!R[x.id]&&(!f||x.lv===f)&&(x.title+x.sub+x.desc).toLowerCase().includes(q));
+  a.sort($('#so').value==='v'?(x,y)=>(y.v+(V[y.id]?1:0))-(x.v+(V[x.id]?1:0)):(x,y)=>y.t-x.t);
+  $('#list').innerHTML=a.length?a.map(x=>`<article class="card sheet"><div class="vote"><button class="${V[x.id]?'on':''}" data-v="${x.id}" aria-label="โหวตชีทนี้">▲</button><b class="pr">${x.v+(V[x.id]?1:0)}</b></div><div><h3>${esc(x.title)}</h3><div class="meta"><span>${esc(x.sub)}</span><span>${esc(x.lv)}</span></div><p>${esc(x.desc)}</p>${x.url?`<a href="${esc(x.url)}" target="_blank" rel="noopener">เปิดชีท</a> · `:'<span class="lk">ตัวอย่างชีท</span> · '}<button class="rep" data-r="${x.id}">รายงานลิขสิทธิ์</button></div></article>`).join(''):'<div class="empty card" style="grid-column:1/-1">ไม่พบชีทที่ตรงกัน ลองแชร์ชีทของคุณเป็นคนแรก</div>';
+}
+$('#list').onclick=e=>{
+  const v=e.target.dataset.v,r=e.target.dataset.r;
+  if(v){V[v]=!V[v];save('sb_votes',V);renderLib()}
+  if(r){R[r]=1;save('sb_rep',R);renderLib();toast('ซ่อนชีทนี้และส่งรายงานแล้ว')}
+};
+['q','fl','so'].forEach(i=>$('#'+i).oninput=renderLib);
+$('#new').onclick=()=>$('#dlg').showModal();
+$('#cancel').onclick=()=>$('#dlg').close();
+$('#save').onclick=()=>{
+  const t=$('#a1').value.trim(),s=$('#a2').value.trim();
+  if(!t||!s){toast('กรอกชื่อชีทและวิชาก่อนนะ');return}
+  let u=$('#a5').value.trim();if(u&&!/^https?:\/\//.test(u))u='';
+  L.unshift({id:'u'+Date.now(),title:t,sub:s,lv:$('#a3').value,desc:$('#a4').value.trim(),url:u,v:0,t:Date.now()});
+  save('sb_lib',L);$('#dlg').close();['a1','a2','a4','a5'].forEach(i=>$('#'+i).value='');renderLib();toast('โพสต์ชีทแล้ว');
+};
+
+const gcal=s=>{const a=s.date.replace(/-/g,''),b=ymd(addD(parse(s.date),1)).replace(/-/g,'');return 'https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent('สอบ '+s.name)+'&dates='+a+'/'+b};
+function renderStats(){const H=S.hist||{},ids=Object.keys(H),hrs=ids.reduce((a,k)=>a+H[k],0),days=new Set(ids.map(k=>k.slice(0,10)));let st=0,d=todayD();if(!days.has(ymd(d)))d=addD(d,-1);while(days.has(ymd(d))){st++;d=addD(d,-1)}
+ $('#stats').innerHTML=`<div><b>${st}</b><small>วันติดต่อกัน 🔥</small></div><div><b>${Math.round(hrs*10)/10}</b><small>ชั่วโมงที่อ่านแล้ว</small></div><div><b>${ids.length}</b><small>งานที่เสร็จ</small></div>`}
+/* ---------- Feedback ---------- */
+let F=load('sb_fb',[{id:'d1',n:'ตัวอย่าง',r:5,c:'ตารางอ่านหนังสือ',t:'แบ่งเวลาอ่านให้อัตโนมัติและมีเตือนทบทวน ช่วยได้มากช่วงสอบ',h:3,demo:1,ts:3},{id:'d2',n:'ตัวอย่าง',r:4,c:'คลังชีท',t:'อยากให้มีอัปโหลดไฟล์ PDF โดยตรง',h:5,demo:1,ts:2}]),FH=load('sb_fh',{}),rate=0;
+function renderFb(){
+ $('#stars').innerHTML=[1,2,3,4,5].map(i=>`<button type="button" role="radio" aria-checked="${rate===i}" aria-label="${i} ดาว" data-s="${i}" class="${i<=rate?'on':''}">★</button>`).join('');
+ const real=F.filter(x=>!x.demo),n=real.length;
+ $('#avg').textContent=n?(real.reduce((a,x)=>a+x.r,0)/n).toFixed(1)+' ★':'ยังไม่มีคะแนน';
+ $('#cnt').textContent=n+' ความเห็นจริง';
+ $('#dist').innerHTML=[5,4,3,2,1].map(s=>{const c=real.filter(x=>x.r===s).length;return `<div class="bar">${s}★<span class="tr"><i style="width:${n?c/n*100:0}%"></i></span>${c}</div>`}).join('');
+ $('#ffl').innerHTML=F.slice().sort((a,b)=>b.ts-a.ts).map(x=>`<article class="card"><div style="color:#ffb400">${'★'.repeat(x.r)}<span style="color:var(--line)">${'★'.repeat(5-x.r)}</span></div><div class="meta"><span>${esc(x.c)}</span>${x.demo?'<span>ตัวอย่าง</span>':''}</div><p style="color:var(--ink);margin:6px 0">${esc(x.t)}</p><small style="color:var(--mute)">${esc(x.n||'ไม่ระบุชื่อ')}</small> <button class="rep" data-h="${x.id}">👍 เป็นประโยชน์ ${x.h+(FH[x.id]?1:0)}</button></article>`).join('');
+}
+$('#stars').onclick=e=>{const s=e.target.dataset.s;if(s){rate=+s;renderFb()}};
+$('#fs').onclick=()=>{const t=$('#ft').value.trim();if(!rate||t.length<5){toast('ให้ดาวและเขียนความเห็นอย่างน้อย 5 ตัวอักษร');return}F.push({id:'f'+Date.now(),n:$('#fn').value.trim(),r:rate,c:$('#fc').value,t,h:0,ts:Date.now()});save('sb_fb',F);rate=0;$('#ft').value='';renderFb();toast('ขอบคุณสำหรับความเห็น')};
+$('#ffl').onclick=e=>{const h=e.target.dataset.h;if(h){FH[h]=!FH[h];save('sb_fh',FH);renderFb()}};
+renderPlan();showT();renderFb();
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+const hb=document.querySelector('[data-tab="'+location.hash.slice(1)+'"]');if(hb)hb.click();
+</script>
+</body>
+</html>
